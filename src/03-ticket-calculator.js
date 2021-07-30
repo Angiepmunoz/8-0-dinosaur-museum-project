@@ -95,7 +95,7 @@ function calculateTicketPrice(ticketData, ticketInfo) {
 /**
  * purchaseTickets()
  * ---------------------
- * Returns a receipt based off of a number of purchase. Each "purchase" maintains the shape from `ticketInfo` in the previous function.
+ * Returns a receipt based off of a number of purchase. Each `  "purchase" maintains the shape from `ticketInfo` in the previous function.
  *
  * Any errors that would occur as a result of incorrect ticket information should be surfaced in the same way it is in the previous function.
  * 
@@ -145,7 +145,61 @@ function calculateTicketPrice(ticketData, ticketInfo) {
     purchaseTickets(tickets, purchases);
     //> "Ticket type 'discount' cannot be found."
  */
-function purchaseTickets(ticketData, purchases) {}
+function capitalize(word) {
+  if (!word.includes(" ")) {
+    return word.slice(0, 1).toUpperCase() + word.slice(1);
+  } else {
+    const wordArr = word.split(" ");
+    return wordArr
+      .map((word) => {
+        return word.slice(0, 1).toUpperCase() + word.slice(1);
+      })
+      .join(" ");
+  }
+}
+
+function formatIndividualTicket(ticketType, entrantType, extras, ticketPrice, lastIndex = false){
+  if(extras.length){
+    if(!lastIndex){
+      return `${capitalize(entrantType)} ${capitalize(ticketType)} Admission: $${(ticketPrice / 100).toFixed(2)} (${extras.join(", ")})\n`;
+    }else{
+      return `${capitalize(entrantType)} ${capitalize(ticketType)} Admission: $${(ticketPrice / 100).toFixed(2)} (${extras.join(", ")})`;
+    }
+  }else{
+    if(!lastIndex){
+      return `${capitalize(entrantType)} ${capitalize(ticketType)} Admission: $${(ticketPrice / 100).toFixed(2)}\n`;
+    }else{
+      return `${capitalize(entrantType)} ${capitalize(ticketType)} Admission: $${(ticketPrice / 100).toFixed(2)}`;
+    }
+  }
+}
+
+function purchaseTickets(ticketData, purchases) {
+  let receipt = `Thank you for visiting the Dinosaur Museum!\n-------------------------------------------\n`;
+
+  let allTickPrice = 0;
+
+  for (let i = 0; i < purchases.length; i++) {
+    const ticketPrice = calculateTicketPrice(ticketData, purchases[i]);
+    if (typeof ticketPrice !== "number") {
+      return ticketPrice;
+    } else {
+      allTickPrice += ticketPrice / 100;
+    }
+
+    const { ticketType, entrantType, extras } = purchases[i];
+    const extrasFormatted = extras.map((extra) => {
+      return capitalize(extra) + ' Access';
+    });
+
+    if (i !== purchases.length - 1) {
+      receipt += formatIndividualTicket(ticketType,entrantType,extrasFormatted, ticketPrice);
+    } else {
+      receipt += formatIndividualTicket(ticketType,entrantType,extrasFormatted, ticketPrice, true);
+    }
+  }
+  return (receipt += `\n-------------------------------------------\nTOTAL: $${allTickPrice.toFixed(2)}`);
+}
 
 // Do not change anything below this line.
 module.exports = {
