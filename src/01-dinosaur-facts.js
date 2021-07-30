@@ -99,6 +99,7 @@ function getDinosaurDescription(dinosaurs, id) {
  */
 function getDinosaursAliveMya(dinosaurs, mya, key = "dinosaurId") {
   const aliveDinoArr = [];
+
   for (let i = 0; i < dinosaurs.length; i++) {
     if (dinosaurs[i].mya[0] >= mya && dinosaurs[i].mya[1] <= mya) {
       aliveDinoArr.push(dinosaurs[i][key]);
@@ -109,6 +110,7 @@ function getDinosaursAliveMya(dinosaurs, mya, key = "dinosaurId") {
       aliveDinoArr.push(dinosaurs[i][key]);
     }
   }
+
   return aliveDinoArr;
 }
 

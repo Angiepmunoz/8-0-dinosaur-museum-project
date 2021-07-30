@@ -32,12 +32,17 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
       dinoId += dino.dinosaurId;
     }
   });
-  if (!dinoId) return `Dinosaur with name '${dinosaurName}' cannot be found.`;
+
+  if (!dinoId) {
+    return `Dinosaur with name '${dinosaurName}' cannot be found.`;
+  }
+
   for (const room of rooms) {
     if (room.dinosaurs.includes(dinoId)) {
       return room.name;
     }
   }
+
   return `Dinosaur with name '${dinosaurName}' cannot be found in any rooms.`;
 }
 
@@ -65,19 +70,26 @@ function getRoomByDinosaurName(dinosaurs, rooms, dinosaurName) {
  */
 function getConnectedRoomNamesById(rooms, id) {
   const connectedRooms = [];
+
+  //check that id exist for every room obj
   const idFound = rooms.filter((room) => {
     return room.roomId === id;
   });
-  const allIds = rooms.map((room) => {
-    return room.roomId;
-  });
+
+  //if it is not found, wrong id
   if (!idFound.length) {
     return `Room with ID of '${id}' could not be found.`;
   }
+
+  const allIds = rooms.map((room) => {
+    return room.roomId;
+  });
+
   for (const room of rooms) {
     if (room.connectsTo.includes(id)) {
       connectedRooms.push(room.name);
     }
+    //if roomId equals the given id loop through the connected rooms to confirm that all the ids are valid
     if (room.roomId === id) {
       for (const connectedRoom of room.connectsTo) {
         if (!allIds.includes(connectedRoom)) {
@@ -86,6 +98,7 @@ function getConnectedRoomNamesById(rooms, id) {
       }
     }
   }
+
   return connectedRooms;
 }
 
